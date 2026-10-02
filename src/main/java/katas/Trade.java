@@ -3,7 +3,7 @@ package katas;
 import java.math.BigDecimal;
 
 public class Trade {
-    public enum Status { OPEN, TARGET_HIT, STOP_HIT }
+    public enum Status { OPEN, TARGET_HIT, STOP_HIT , CANCELLED}
 
     private final String id;
     private final String symbol;
