@@ -13,8 +13,16 @@ public class Kata2 {
                 new Trade("T4", "INFY", 40, new BigDecimal("1580"), new BigDecimal("1620"), Trade.Status.TARGET_HIT));
         Trade missing = findByIdOld(trades, "T9");
         //System.out.println(missing.getSymbol());
-        System.out.println(findById(trades,"T9").map(Trade ::getSymbol).orElseThrow(() -> new IllegalArgumentException("No Trade T9")));
-        System.out.println(findById(trades,"T3").map(Trade ::getSymbol).orElse("Not Found"));
+        //System.out.println(findById(trades,"T9").map(Trade ::getSymbol).orElseThrow(() -> new IllegalArgumentException("No Trade T9")));
+        //System.out.println(findById(trades,"T3").map(Trade ::getSymbol).orElse("Not Found"));
+
+        String raw = "  INFY \n\n TCS\n   \nRELIANCE  ";
+        var cleaned=raw.lines()
+                .map(String :: strip)
+                .filter(line->!line.isBlank())
+                .toList();
+        System.out.println(cleaned);
+        System.out.println("_".repeat(30));
 
     }
 
@@ -30,4 +38,6 @@ public class Kata2 {
     static Optional<Trade> findById(List<Trade> trades,String id){
         return trades.stream().filter(trade -> trade.getId().equals(id)).findFirst();
     }
+
+
 }
