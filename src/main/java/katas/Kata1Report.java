@@ -15,8 +15,8 @@ public class Kata1Report {
         var closed = trades.stream().filter(trade -> trade.getStatus()!= Trade.Status.OPEN).toList();
         var total = closed.stream().map(Trade::pnl).reduce(BigDecimal.ZERO,BigDecimal::add);
 
-        List<String> symbols = closed.stream().map(Trade::getSymbol)
-                .distinct().collect(Collectors.toList());
+        var symbols = closed.stream().map(Trade::getSymbol).distinct().toList();
+
 
         System.out.println("Closed trades: " + closed.size());
         System.out.println("Symbols: " + symbols);
