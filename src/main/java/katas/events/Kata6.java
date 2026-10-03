@@ -11,7 +11,32 @@ public class Kata6 {
             case Entry en      -> "Entered " + en.symbol() + " x" + en.qty() + " @ " + en.price();
             case PartialExit p-> "Sold "+p.qty()+" @ "+p.price();
             case StopHit s->"Stopped out @ " + s.price();
+            case Cancelled c->"Cancelled "+c.tradeId();
         };
+    }
+
+    static String describeShort(TradeEvent evt){
+        return switch (evt){
+            case Entry(var tradeId, var symbol, var qty, var price)->tradeId + ": bought " + qty + " " + symbol;
+            case PartialExit p when p.qty()>=30->"Large partial exit: " + p.qty();
+            case PartialExit(var tradeId, var qty, var price)->tradeId + ": sold " + qty;
+            case StopHit(String tradeId, BigDecimal price)->tradeId + ": stop at " + price;
+            case Cancelled(String tradeId)->"Cancelled "+tradeId;
+        };
+    }
+
+    static int remainingQty(List<TradeEvent> events){
+        int qty=0;
+        for(TradeEvent event:events){
+            qty=switch (event){
+                case Entry en->qty+en.qty();
+                case PartialExit pe->qty- pe.qty();
+                case StopHit s->0;
+                case Cancelled c->qty;
+            };
+        }
+
+        return qty;
     }
 
     public static void main(String[] args) {
@@ -25,6 +50,10 @@ public class Kata6 {
 
         for(TradeEvent event: events){
             System.out.println(describe(event));
+        }
+        System.out.println("_".repeat(30));
+        for(TradeEvent event: events){
+            System.out.println(describeShort(event));
         }
     }
 }
