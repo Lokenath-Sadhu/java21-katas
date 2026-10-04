@@ -74,4 +74,12 @@ public final class PositionSizer {
     private static SizingResult.Rejected rejected(SizingResult.Reason reason, String message) {
         return new SizingResult.Rejected(reason, message);
     }
+
+    public static String explain(SizingResult result){
+        return switch (result){
+            case SizingResult.Sized s when s.cappedByCapital() ->"Buy %d shares (limited by your capital). Position value %s, maximum loss %s.".formatted(s.qty(),s.positionValue(),s.maxLoss());
+            case SizingResult.Sized s->"Buy %d shares. Position value %s, maximum loss %s (risk budget %s).".formatted(s.qty(),s.positionValue(),s.maxLoss(),s.riskAmount());
+            case SizingResult.Rejected r->"Rejected (" + r.reason() +") : "+r.message();
+        };
+    }
 }
